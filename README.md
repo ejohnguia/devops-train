@@ -1,6 +1,6 @@
 # DevOps Testing Repository
 
-This repository is a playground for exploring and testing various DevOps tools, including **Terraform**, **Ansible**, and other technologies commonly used in infrastructure automation, configuration management, and CI/CD pipelines. It is designed to be a learning resource and a place to document workflows, scripts, and example configurations.
+This repository is a playground for exploring and testing various DevOps tools commonly used in infrastructure automation, configuration management, and CI/CD pipelines. It is designed to be a learning resource and a place to document workflows, scripts, and example configurations.
 
 ## Table of Contents
 
@@ -49,15 +49,15 @@ To use this repository, you’ll need:
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/your-repo-name.git
-    cd your-repo-name
+    git clone git@github.com:ejohnguia/devops-train.git
+    cd devops-train
     ```
 
 2. **Set up environment variables** for Terraform and Ansible if needed:
 
     ```bash
-    export AWS_ACCESS_KEY_ID=your_access_key
-    export AWS_SECRET_ACCESS_KEY=your_secret_key
+    export ACCESS_KEY_ID=your_access_key
+    export SECRET_ACCESS_KEY=your_secret_key
     ```
 
 3. **Install Python dependencies** (if any):
