@@ -59,3 +59,37 @@ resource "azapi_resource" "nsg" {
     }
   }
 }
+
+resource "azapi_resource" "nic" {
+  type      = "Microsoft.Network/networkInterfaces@2024-03-01"
+  name      = var.nic.name
+  location  = var.nic.location
+  parent_id = var.nic.parent_id
+  body = {
+    properties = {
+      ipConfigurations = [
+        {
+          name = "ipconfig1"
+          type = "Microsoft.Network/networkInterfaces/ipConfigurations"
+          properties = {
+            privateIPAddress          = "10.12.0.4"
+            privateIPAllocationMethod = "Dynamic"
+            privateIPAddressVersion   = "IPv4"
+            primary                   = true
+
+            # publicIPAddress = {
+            #   id = "/subscriptions/${var.subscription_id}/resourceGroups/mytemp/providers/Microsoft.Network/publicIPAddresses/myvm-ip"
+            #   properties = {
+            #     deleteOption = "Delete"
+            #   }
+            # }
+
+            subnet = {
+              id = "/subscriptions/${var.subscription_id}/resourceGroups/mytemp/providers/Microsoft.Network/virtualNetworks/myvm-vnet/subnets/default"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

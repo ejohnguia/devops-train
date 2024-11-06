@@ -36,10 +36,11 @@ module "resource_group" {
 }
 
 module "network" {
-  source = "./modules/network"
-  vnet   = local.vnet
-  nsg    = local.nsg
-  # nic    = local.nic
+  source          = "./modules/network"
+  vnet            = local.vnet
+  nsg             = local.nsg
+  nic             = local.nic
+  subscription_id = var.subscription_id
 }
 
 module "os_disk" {
