@@ -1,4 +1,4 @@
-resource "azapi_resource" "myvm_vnet" {
+resource "azapi_resource" "vnet" {
   type      = "Microsoft.Network/virtualNetworks@2024-03-01"
   name      = var.vnet.name
   location  = "canadacentral"
@@ -6,22 +6,8 @@ resource "azapi_resource" "myvm_vnet" {
   body = {
     properties = {
       addressSpace = {
-        addressPrefixes = [
-          "10.12.0.0/16"
-        ]
+        addressPrefixes = ["10.12.0.0/16"]
       }
-      subnets = [
-        {
-          name = "default"
-          properties = {
-            addressPrefix                     = "10.12.0.0/24"
-            delegations                       = []
-            privateEndpointNetworkPolicies    = "Disabled"
-            privateLinkServiceNetworkPolicies = "Enabled"
-          }
-          type = "Microsoft.Network/virtualNetworks/subnets"
-        }
-      ]
       virtualNetworkPeerings = []
       enableDdosProtection   = false
     }
@@ -60,6 +46,17 @@ resource "azapi_resource" "nsg" {
   }
 }
 
+resource "azapi_resource" "subnet" {
+  type      = "Microsoft.Network/virtualNetworks/subnets@2024-03-01"
+  name      = "my-subnet"
+  parent_id = azapi_resource.vnet.id
+  body = {
+    properties = {
+      addressPrefix = "10.12.0.0/24"
+    }
+  }
+}
+
 resource "azapi_resource" "nic" {
   type      = "Microsoft.Network/networkInterfaces@2024-03-01"
   name      = var.nic.name
@@ -76,16 +73,8 @@ resource "azapi_resource" "nic" {
             privateIPAllocationMethod = "Dynamic"
             privateIPAddressVersion   = "IPv4"
             primary                   = true
-
-            # publicIPAddress = {
-            #   id = "/subscriptions/${var.subscription_id}/resourceGroups/mytemp/providers/Microsoft.Network/publicIPAddresses/myvm-ip"
-            #   properties = {
-            #     deleteOption = "Delete"
-            #   }
-            # }
-
             subnet = {
-              id = "/subscriptions/${var.subscription_id}/resourceGroups/mytemp/providers/Microsoft.Network/virtualNetworks/myvm-vnet/subnets/default"
+              id = azapi_resource.subnet.id
             }
           }
         }
