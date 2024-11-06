@@ -3,3 +3,7 @@ resource "azapi_resource" "rg" {
   name     = var.rg.name
   location = var.rg.location
 }
+
+output "id" {
+  value = azapi_resource.rg.id
+}
