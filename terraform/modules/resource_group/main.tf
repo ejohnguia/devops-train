@@ -4,6 +4,3 @@ resource "azapi_resource" "rg" {
   location = var.rg.location
 }
 
-output "id" {
-  value = azapi_resource.rg.id
-}
