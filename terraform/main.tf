@@ -1,3 +1,9 @@
+/* 
+Name: IaC Buildout for Terraform Associate Exam
+Description: AWS Infratructure Buildout
+Contributors: Bryan and Gabr
+*/
+
 provider "aws" {
   region                   = "ca-west-1"
   shared_credentials_files = ["${path.module}/.terraform/credentials"]
