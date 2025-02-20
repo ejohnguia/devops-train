@@ -371,3 +371,9 @@ resource "aws_instance" "web_server" {
   }
 
 }
+
+# IMPORT
+# resource "aws_instance" "aws_linux" {
+#   ami           = "ami-0265d6107c7cd5e12"
+#   instance_type = "t3.micro"
+# }
