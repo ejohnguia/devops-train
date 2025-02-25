@@ -5,9 +5,15 @@ Contributors: Bryan and Gabr
 */
 
 provider "aws" {
-  region                   = "ca-west-1"
+  region                   = var.aws_region
   shared_credentials_files = ["${path.module}/.terraform/credentials"]
   profile                  = "default"
+  default_tags {
+    tags = {
+      Environment = terraform.workspace
+      Terraform   = "true"
+    }
+  }
 }
 
 #Retrieve the list of AZs in the current AWS region
@@ -255,7 +261,7 @@ resource "local_file" "private_key_pem" {
 }
 
 resource "aws_key_pair" "generated" {
-  key_name   = "MyAWSKey"
+  key_name   = "MyAWSKey2"
   public_key = tls_private_key.generated.public_key_openssh
 
   lifecycle {
