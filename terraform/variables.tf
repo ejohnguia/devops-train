@@ -4,7 +4,7 @@ variable "aws_region" {
   default     = "ca-west-1"
   validation {
     condition     = can(regex("^ca-", var.aws_region))
-    error_message = "The aws_region value must be a valid region in the USA, starting with \"us-\"."
+    error_message = "The aws_region value must be a valid region in the CA, starting with \"ca-\"."
   }
 }
 

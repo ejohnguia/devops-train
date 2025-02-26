@@ -383,3 +383,14 @@ resource "aws_instance" "web_server" {
 #   ami           = "ami-0265d6107c7cd5e12"
 #   instance_type = "t3.micro"
 # }
+
+module "server_subnet_1" {
+  source    = "./server"
+  ami       = data.aws_ami.ubuntu.id
+  subnet_id = aws_subnet.public_subnets["public_subnet_1"].id
+  security_groups = [
+    aws_security_group.vpc-ping.id,
+    aws_security_group.ingress-ssh.id,
+    aws_security_group.vpc-web.id
+  ]
+}
