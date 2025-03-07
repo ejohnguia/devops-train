@@ -384,6 +384,30 @@ resource "aws_instance" "web_server" {
 #   instance_type = "t3.micro"
 # }
 
+module "server" {
+  source          = "./modules/server"
+  ami             = data.aws_ami.ubuntu.id
+  size            = "t3.micro"
+  subnet_id       = aws_subnet.public_subnets["public_subnet_2"].id
+  security_groups = [aws_security_group.vpc-ping.id, aws_security_group.ingress-ssh.id, aws_security_group.vpc-web.id]
+}
+
+output "public_ip" {
+  value = module.server.public_ip
+}
+
+output "public_dns" {
+  value = module.server.public_dns
+}
+
+output "size" {
+  value = module.server.size
+}
+
+output "public_ip_server_subnet_1" {
+  value = module.server_subnet_1.public_ip
+}
+
 module "server_subnet_1" {
   source      = "./modules/web_server"
   ami         = data.aws_ami.ubuntu.id
