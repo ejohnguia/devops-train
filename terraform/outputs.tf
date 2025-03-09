@@ -8,10 +8,10 @@ output "vpc_id" {
   value       = aws_vpc.vpc.id
 }
 
-output "public_url" {
-  description = "Public URL for our Web Server"
-  value       = "https://${aws_instance.ubuntu_server.public_ip}:8080/index.html"
-}
+# output "public_url" {
+#   description = "Public URL for our Web Server"
+#   value       = "https://${aws_instance.ubuntu_server.public_ip}:8080/index.html"
+# }
 
 output "vpc_information" {
   description = "VPC Information about Environment"
