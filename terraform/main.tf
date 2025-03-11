@@ -507,3 +507,7 @@ Contributors: Bryan and Gabr
 #     Environment = "dev"
 #   }
 # }
+
+resource "random_string" "random" {
+  length = 10
+}
