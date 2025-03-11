@@ -4,17 +4,17 @@ Description: AWS Infratructure Buildout
 Contributors: Bryan and Gabr
 */
 
-# provider "aws" {
-#   region                   = var.aws_region
-#   shared_credentials_files = ["${path.module}/.terraform/credentials"]
-#   profile                  = "default"
-#   default_tags {
-#     tags = {
-#       Environment = terraform.workspace
-#       Terraform   = "true"
-#     }
-#   }
-# }
+provider "aws" {
+  region                   = var.aws_region
+  shared_credentials_files = ["${path.module}/.terraform/credentials"]
+  profile                  = "default"
+  default_tags {
+    tags = {
+      Environment = terraform.workspace
+      Terraform   = "true"
+    }
+  }
+}
 
 # #Retrieve the list of AZs in the current AWS region
 # data "aws_availability_zones" "available" {}
@@ -508,6 +508,21 @@ Contributors: Bryan and Gabr
 #   }
 # }
 
-resource "random_string" "random" {
-  length = 10
+# resource "random_string" "random" {
+#   length = 10
+# }
+
+resource "random_pet" "server" {
+  length = 2
 }
+
+module "s3-bucket_example_complete" {
+  source  = "terraform-aws-modules/s3-bucket/aws//examples/complete"
+  version = "2.10.0"
+}
+
+# terraform {
+#   backend "local" {
+#     path = "mystate/terraform.tfstate"
+#   }
+# }
