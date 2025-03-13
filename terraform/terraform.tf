@@ -29,6 +29,9 @@ terraform {
   #   bucket = "my-terraform-state-ejg"
   #   key    = "prod/aws_infra"
   #   region = "ca-west-1"
+
+  #   dynamodb_table = "terraform-locks"
+  #   encrypt        = true
   # }
   required_version = ">= 1.0.0"
   required_providers {
