@@ -33,6 +33,14 @@ terraform {
   #   dynamodb_table = "terraform-locks"
   #   encrypt        = true
   # }
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "blusnowy-learn-terraform"
+
+    workspaces {
+      name = "my-workspace"
+    }
+  }
   required_version = ">= 1.0.0"
   required_providers {
     aws = {

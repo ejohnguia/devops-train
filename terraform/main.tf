@@ -5,9 +5,9 @@ Contributors: Bryan and Gabr
 */
 
 provider "aws" {
-  region                   = var.aws_region
-  shared_credentials_files = ["${path.module}/.terraform/credentials"]
-  profile                  = "default"
+  region = var.aws_region
+  # shared_credentials_files = ["${path.module}/.terraform/credentials"]
+  # profile                  = "default"
   default_tags {
     tags = {
       Environment = terraform.workspace
@@ -257,7 +257,7 @@ resource "tls_private_key" "generated" {
 
 resource "local_file" "private_key_pem" {
   content  = tls_private_key.generated.private_key_pem
-  filename = "${path.module}/.terraform/MyAWSKey.pem"
+  filename = "MyAWSKey.pem"
 }
 
 resource "aws_key_pair" "generated" {
