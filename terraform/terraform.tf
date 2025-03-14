@@ -28,13 +28,13 @@ terraform {
   # backend "s3" {
   # }
 
-  # backend "remote" {
-  #   hostname     = "app.terraform.io"
-  #   organization = "blusnowy-learn-terraform"
-  #   workspaces {
-  #     name = "my-workspace"
-  #   }
-  # }
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "blusnowy-learn-terraform"
+    workspaces {
+      name = "my-workspace"
+    }
+  }
 
   # backend "local" {
   #   path = "terraform.tfstate"
