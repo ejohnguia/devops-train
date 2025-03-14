@@ -5,9 +5,9 @@ Contributors: Bryan and Gabr
 */
 
 provider "aws" {
-  region = var.aws_region
-  # shared_credentials_files = ["${path.module}/.terraform/credentials"]
-  # profile                  = "default"
+  region                   = var.aws_region
+  shared_credentials_files = ["${path.module}/.terraform/credentials"]
+  profile                  = "default"
   default_tags {
     tags = {
       Environment = terraform.workspace
