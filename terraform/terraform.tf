@@ -26,12 +26,6 @@
 
 terraform {
   # backend "s3" {
-  #   bucket = "my-terraform-state-ejg"
-  #   key    = "prod/aws_infra"
-  #   region = "ca-west-1"
-
-  #   dynamodb_table = "terraform-locks"
-  #   encrypt        = true
   # }
 
   # backend "remote" {
@@ -40,6 +34,10 @@ terraform {
   #   workspaces {
   #     name = "my-workspace"
   #   }
+  # }
+
+  # backend "local" {
+  #   path = "terraform.tfstate"
   # }
 
   required_version = ">= 1.0.0"
