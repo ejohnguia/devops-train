@@ -10,11 +10,11 @@ variable "last_name" {
   default   = "Tom"
 }
 
-variable "phone_number" {
-  type      = string
-  sensitive = true
-  default   = "867-5309"
-}
+# variable "phone_number" {
+#   type      = string
+#   sensitive = true
+#   default   = "867-5309"
+# }
 
 locals {
   contact_info = {
@@ -36,10 +36,10 @@ output "last_name" {
   sensitive = true
 }
 
-output "phone_number" {
-  value     = local.contact_info.phone_number
-  sensitive = true
-}
+# output "phone_number" {
+#   value     = local.contact_info.phone_number
+#   sensitive = true
+# }
 
 output "my_number" {
   value = local.my_number
