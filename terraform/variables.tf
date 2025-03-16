@@ -61,3 +61,34 @@ variable "phone_number" {
   sensitive = true
   # default   = "867-5309"
 }
+
+variable "ca-west-1-azs" {
+  type = list(string)
+  default = [
+    "ca-west-1a",
+    "ca-west-1b",
+    "ca-west-1c",
+  ]
+}
+
+variable "ip" {
+  type = map(string)
+  default = {
+    prod = "10.0.150.0/24"
+    dev  = "10.0.250.0/24"
+  }
+}
+
+variable "env" {
+  type = map(any)
+  default = {
+    prod = {
+      ip = "10.0.150.0/24"
+      az = "ca-west-1a"
+    }
+    dev = {
+      ip = "10.0.250.0/24"
+      az = "ca-west-1b"
+    }
+  }
+}
