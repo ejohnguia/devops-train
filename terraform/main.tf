@@ -154,67 +154,50 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
 
-# # Terraform Data Block - To Lookup Latest Ubuntu 20.04 AMI Image
+# Terraform Data Block - Lookup Ubuntu 22.04
 data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
   owners = ["099720109477"]
 }
 
-# Terraform Data Block - Lookup Ubuntu 22.04
-# data "aws_ami" "ubuntu" {
-#   most_recent = true
+resource "aws_instance" "ubuntu_server" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t3.micro"
+  subnet_id                   = aws_subnet.public_subnets["public_subnet_1"].id
+  security_groups             = [aws_security_group.vpc-ping.id, aws_security_group.ingress-ssh.id, aws_security_group.vpc-web.id]
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.generated.key_name
+  connection {
+    user        = "ubuntu"
+    private_key = tls_private_key.generated.private_key_pem
+    host        = self.public_ip
+  }
 
-#   filter {
-#     name   = "name"
-#     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-#   }
+  # Leave the first part of the block unchanged and create our `local-exec` provisioner
+  provisioner "local-exec" {
+    command = "powershell -Command \"Set-ItemProperty -Path '${local_file.private_key_pem.filename}' -Name 'mode' -Value '600'\""
+  }
 
-#   owners = ["099720109477"]
-# }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo rm -rf /tmp",
+      "sudo git clone https://github.com/hashicorp/demo-terraform-101 /tmp",
+      "sudo sh /tmp/assets/setup-web.sh",
+    ]
+  }
+  tags = local.common_tags
 
-# resource "aws_instance" "ubuntu_server" {
-#   ami                         = data.aws_ami.ubuntu.id
-#   instance_type               = "t3.micro"
-#   subnet_id                   = aws_subnet.public_subnets["public_subnet_1"].id
-#   security_groups             = [aws_security_group.vpc-ping.id, aws_security_group.ingress-ssh.id, aws_security_group.vpc-web.id]
-#   associate_public_ip_address = true
-#   key_name                    = aws_key_pair.generated.key_name
-#   connection {
-#     user        = "ubuntu"
-#     private_key = tls_private_key.generated.private_key_pem
-#     host        = self.public_ip
-#   }
+  lifecycle {
+    ignore_changes = [security_groups]
+  }
 
-#   # Leave the first part of the block unchanged and create our `local-exec` provisioner
-#   provisioner "local-exec" {
-#     command = "powershell -Command \"Set-ItemProperty -Path '${local_file.private_key_pem.filename}' -Name 'mode' -Value '600'\""
-#   }
-
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo rm -rf /tmp",
-#       "sudo git clone https://github.com/hashicorp/demo-terraform-101 /tmp",
-#       "sudo sh /tmp/assets/setup-web.sh",
-#     ]
-#   }
-#   tags = local.common_tags
-
-#   lifecycle {
-#     ignore_changes = [security_groups]
-#   }
-
-# }
+}
 
 # resource "aws_s3_bucket" "my-new-S3-bucket" {
 #   bucket = "my-new-tf-test-bucket-${random_id.randomness.hex}"
