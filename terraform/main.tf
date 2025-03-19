@@ -57,13 +57,26 @@ locals {
 locals {
   # Common tags to be assigned to all resources
   common_tags = {
-    Name      = local.server_name
-    Owner     = local.team
-    App       = local.application
-    Service   = local.service_name
-    AppTeam   = local.app_team
-    CreatedBy = local.createdby
+    Name      = lower(local.server_name)
+    Owner     = lower(local.team)
+    App       = lower(local.application)
+    Service   = lower(local.service_name)
+    AppTeam   = lower(local.app_team)
+    CreatedBy = lower(local.createdby)
   }
+}
+
+locals {
+  maximum = max(var.num_1, var.num_2, var.num_3)
+  minimum = min(var.num_1, var.num_2, var.num_3, 44, 20)
+}
+
+output "max_value" {
+  value = local.maximum
+}
+
+output "min_value" {
+  value = local.minimum
 }
 
 # #Define the VPC
@@ -71,9 +84,9 @@ resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name        = var.vpc_name
-    Environment = "demo_environment"
-    Terraform   = "true"
+    Name        = upper(var.vpc_name)
+    Environment = upper(var.environment)
+    Terraform   = upper("true")
     Region      = data.aws_region.current.name
   }
 }
