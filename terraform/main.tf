@@ -66,18 +66,18 @@ locals {
   }
 }
 
-locals {
-  maximum = max(var.num_1, var.num_2, var.num_3)
-  minimum = min(var.num_1, var.num_2, var.num_3, 44, 20)
-}
+# locals {
+#   maximum = max(var.num_1, var.num_2, var.num_3)
+#   minimum = min(var.num_1, var.num_2, var.num_3, 44, 20)
+# }
 
-output "max_value" {
-  value = local.maximum
-}
+# output "max_value" {
+#   value = local.maximum
+# }
 
-output "min_value" {
-  value = local.minimum
-}
+# output "min_value" {
+#   value = local.minimum
+# }
 
 # #Define the VPC
 resource "aws_vpc" "vpc" {
@@ -289,10 +289,10 @@ resource "tls_private_key" "generated" {
   algorithm = "RSA"
 }
 
-# resource "local_file" "private_key_pem" {
-#   content  = tls_private_key.generated.private_key_pem
-#   filename = "MyAWSKey.pem"
-# }
+resource "local_file" "private_key_pem" {
+  content  = tls_private_key.generated.private_key_pem
+  filename = "MyAWSKey.pem"
+}
 
 resource "aws_key_pair" "generated" {
   key_name   = "MyAWSKey"
@@ -305,7 +305,7 @@ resource "aws_key_pair" "generated" {
 
 # # Security Groups
 resource "aws_security_group" "main" {
-  name   = "core-sg"
+  name   = "core-sg-global"
   vpc_id = aws_vpc.vpc.id
 
   dynamic "ingress" {
@@ -317,6 +317,11 @@ resource "aws_security_group" "main" {
       protocol    = ingress.value.protocol
       cidr_blocks = ingress.value.cidr_blocks
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+    # prevent_destroy       = true
   }
 }
 
@@ -463,17 +468,20 @@ resource "aws_subnet" "list_subnet" {
 #   value = module.server_subnet_1.public_ip
 # }
 
-# module "server_subnet_1" {
-#   source      = "./modules/web_server"
-#   ami         = data.aws_ami.ubuntu.id
-#   key_name    = aws_key_pair.generated.key_name
-#   user        = "ubuntu"
-#   private_key = tls_private_key.generated.private_key_pem
-#   subnet_id   = aws_subnet.public_subnets["public_subnet_1"].id
-#   security_groups = [aws_security_group.vpc-ping.id,
-#     aws_security_group.ingress-ssh.id,
-#   aws_security_group.vpc-web.id]
-# }
+module "server_subnet_1" {
+  source      = "./modules/web_server"
+  ami         = data.aws_ami.ubuntu.id
+  key_name    = aws_key_pair.generated.key_name
+  user        = "ubuntu"
+  private_key = tls_private_key.generated.private_key_pem
+  subnet_id   = aws_subnet.public_subnets["public_subnet_1"].id
+  security_groups = [
+    aws_security_group.vpc-ping.id,
+    aws_security_group.ingress-ssh.id,
+    aws_security_group.vpc-web.id,
+    aws_security_group.main.id
+  ]
+}
 
 # module "autoscaling" {
 #   source  = "terraform-aws-modules/autoscaling/aws"
@@ -592,10 +600,10 @@ resource "aws_subnet" "list_subnet" {
 #   }
 # }
 
-output "phone_number" {
-  value     = var.phone_number
-  sensitive = true
-}
+# output "phone_number" {
+#   value     = var.phone_number
+#   sensitive = true
+# }
 
 # output "data-bucket-arn" {
 #   value = data.aws_s3_bucket.data_bucket.arn
