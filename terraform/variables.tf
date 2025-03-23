@@ -8,6 +8,12 @@ variable "aws_region" {
   }
 }
 
+variable "environment" {
+  type        = string
+  description = "Infrastructure environment. eg. dev, prod, etc"
+  default     = "test"
+}
+
 variable "vpc_name" {
   type    = string
   default = "demo_vpc"
@@ -50,17 +56,11 @@ variable "variables_sub_auto_ip" {
   default     = true
 }
 
-variable "environment" {
-  description = "Environment for deployment"
-  type        = string
-  default     = "dev"
-}
-
-variable "phone_number" {
-  type      = string
-  sensitive = true
-  # default   = "867-5309"
-}
+# variable "phone_number" {
+#   type      = string
+#   sensitive = true
+# default   = "867-5309"
+# }
 
 variable "ca-west-1-azs" {
   type = list(string)
