@@ -71,14 +71,6 @@ locals {
 #   minimum = min(var.num_1, var.num_2, var.num_3, 44, 20)
 # }
 
-# output "max_value" {
-#   value = local.maximum
-# }
-
-# output "min_value" {
-#   value = local.minimum
-# }
-
 # #Define the VPC
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
@@ -452,22 +444,6 @@ resource "aws_subnet" "list_subnet" {
   availability_zone = each.value.az
 }
 
-# output "public_ip" {
-#   value = module.server.public_ip
-# }
-
-# output "public_dns" {
-#   value = module.server.public_dns
-# }
-
-# output "size" {
-#   value = module.server.size
-# }
-
-# output "public_ip_server_subnet_1" {
-#   value = module.server_subnet_1.public_ip
-# }
-
 module "server_subnet_1" {
   source      = "./modules/web_server"
   ami         = data.aws_ami.ubuntu.id
@@ -537,17 +513,9 @@ module "server_subnet_1" {
 
 # }
 
-# output "asg_gorup_size" {
-#   value = module.autoscaling.autoscaling_group_max_size
-# }
-
 # module "s3-bucket" {
 #   source  = "terraform-aws-modules/s3-bucket/aws"
 #   version = "4.6.0"
-# }
-
-# output "s3_bucket_name" {
-#   value = module.s3-bucket.s3_bucket_bucket_domain_name
 # }
 
 # module "vpc" {
@@ -598,21 +566,4 @@ module "server_subnet_1" {
 #   tags = {
 #     Name = "Web EC2 Server"
 #   }
-# }
-
-# output "phone_number" {
-#   value     = var.phone_number
-#   sensitive = true
-# }
-
-# output "data-bucket-arn" {
-#   value = data.aws_s3_bucket.data_bucket.arn
-# }
-
-# output "data-bucket-domain-name" {
-#   value = data.aws_s3_bucket.data_bucket.bucket_domain_name
-# }
-
-# output "data-bucket-region" {
-#   value = "The ${data.aws_s3_bucket.data_bucket.id} bucket is located in ${data.aws_s3_bucket.data_bucket.region}"
 # }
