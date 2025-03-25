@@ -5,7 +5,21 @@ Contributors: Bryan and Gabr
 */
 
 provider "aws" {
+  alias  = "west"
   region = var.aws_region
+  # shared_credentials_files = ["${path.module}/.terraform/credentials"]
+  # profile                  = "default"
+  default_tags {
+    tags = {
+      Environment = terraform.workspace
+      Terraform   = "true"
+    }
+  }
+}
+
+provider "aws" {
+  alias  = "central"
+  region = "ca-central-1"
   # shared_credentials_files = ["${path.module}/.terraform/credentials"]
   # profile                  = "default"
   default_tags {
@@ -73,11 +87,25 @@ locals {
 
 # #Define the VPC
 resource "aws_vpc" "vpc" {
+  provider   = aws.west
   cidr_block = var.vpc_cidr
 
   tags = {
     Name        = upper(var.vpc_name)
     Environment = upper(var.environment)
+    Terraform   = upper("true")
+    Region      = data.aws_region.current.name
+  }
+}
+
+
+resource "aws_vpc" "vpc" {
+  provider   = aws.central
+  cidr_block = var.vpc_cidr
+
+  tags = {
+    Name        = upper(var.vpc_name)
+    Environment = "disaster_recovery_${upper(var.environment)}"
     Terraform   = upper("true")
     Region      = data.aws_region.current.name
   }
