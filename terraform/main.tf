@@ -99,17 +99,17 @@ resource "aws_vpc" "vpc" {
 }
 
 
-resource "aws_vpc" "vpc" {
-  provider   = aws.central
-  cidr_block = var.vpc_cidr
+# resource "aws_vpc" "vpc" {
+#   provider   = aws.central
+#   cidr_block = var.vpc_cidr
 
-  tags = {
-    Name        = upper(var.vpc_name)
-    Environment = "disaster_recovery_${upper(var.environment)}"
-    Terraform   = upper("true")
-    Region      = data.aws_region.current.name
-  }
-}
+#   tags = {
+#     Name        = upper(var.vpc_name)
+#     Environment = "disaster_recovery_${upper(var.environment)}"
+#     Terraform   = upper("true")
+#     Region      = data.aws_region.current.name
+#   }
+# }
 
 # #Deploy the private subnets
 resource "aws_subnet" "private_subnets" {
